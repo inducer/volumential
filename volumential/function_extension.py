@@ -424,6 +424,7 @@ def compute_biharmonic_extension(queue, target_discr,
     """Biharmoc extension. Currently only support
     interior domains in 2D (i.e., extension is on the exterior).
     """
+    # pylint: disable=invalid-unary-operand-type
     dim = 2
     queue = setup_command_queue(queue=queue)
     qbx_forced_limit = 1
@@ -528,7 +529,7 @@ def compute_biharmonic_extension(queue, target_discr,
 
     omega_S1 = bind(  # noqa: N806
             (qbx_stick_out, target_discr), GS1)(queue, mu=mu).real
-    omega_S2 = - bind(  # noqa: N806,E1130
+    omega_S2 = - bind(  # noqa: N806
             (qbx_stick_out, target_discr), GS2)(queue, mu=mu).real
     omega_S3 = (z_conj * int_rho).real  # noqa: N806
     omega_S = -(omega_S1 + omega_S2 + omega_S3)  # noqa: N806
@@ -536,14 +537,14 @@ def compute_biharmonic_extension(queue, target_discr,
     grad_omega_S1 = bind(  # noqa: N806
             (qbx_stick_out, target_discr),
             sym.grad(dim, GS1))(queue, mu=mu).real
-    grad_omega_S2 = - bind(  # noqa: N806,E1130
+    grad_omega_S2 = - bind(  # noqa: N806
             (qbx_stick_out, target_discr),
             sym.grad(dim, GS2))(queue, mu=mu).real
     grad_omega_S3 = (int_rho * make_obj_array([1., -1.])).real  # noqa: N806
     grad_omega_S = -(grad_omega_S1 + grad_omega_S2 + grad_omega_S3)  # noqa: N806
 
     omega_S1_bdry = bind(qbx, GS1_bdry)(queue, mu=mu).real  # noqa: N806
-    omega_S2_bdry = - bind(qbx, GS2_bdry)(queue, mu=mu).real  # noqa: N806,E1130
+    omega_S2_bdry = - bind(qbx, GS2_bdry)(queue, mu=mu).real  # noqa: N806
     omega_S3_bdry = (z_conj_bdry * int_rho).real  # noqa: N806
     omega_S_bdry = -(omega_S1_bdry + omega_S2_bdry + omega_S3_bdry)  # noqa: N806
 
